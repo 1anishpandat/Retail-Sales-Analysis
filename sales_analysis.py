@@ -119,3 +119,21 @@ df_clean['day_of_week']   = df_clean['order_date'].dt.day_name()
 df_clean['week_of_year']  = df_clean['order_date'].dt.isocalendar().week.astype(int)
 df_clean['year_month']    = df_clean['order_date'].dt.to_period('M').astype(str)
 print("   ✓ Date parts extracted: year, month, quarter, day_of_week")
+
+# ─── 2.2 Handle missing values ───────────────────────────────────
+print("\n🔧 Step 2: Handling missing values...")
+
+# Missing city → fill with 'Unknown'
+missing_city = df_clean['city'].isnull().sum()
+df_clean['city']  = df_clean['city'].fillna('Unknown')
+df_clean['state'] = df_clean['state'].fillna('Unknown')
+print(f"   ✓ City: filled {missing_city} missing values with 'Unknown'")
+
+# Missing discount_pct → fill with 0 (no discount)
+missing_disc = df_clean['discount_pct'].isnull().sum()
+df_clean['discount_pct'] = df_clean['discount_pct'].fillna(0)
+print(f"   ✓ Discount %: filled {missing_disc} missing values with 0 (no discount)")
+
+# Verify no missing values remain
+remaining_missing = df_clean.isnull().sum().sum()
+print(f"   ✓ Remaining missing values: {remaining_missing}")
