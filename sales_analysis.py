@@ -137,3 +137,37 @@ print(f"   ✓ Discount %: filled {missing_disc} missing values with 0 (no disco
 # Verify no missing values remain
 remaining_missing = df_clean.isnull().sum().sum()
 print(f"   ✓ Remaining missing values: {remaining_missing}")
+# ─── 2.3 Create derived/calculated columns ───────────────────────
+print("\n🔧 Step 3: Creating derived columns...")
+
+# Profit margin (assume 35% base cost for Electronics, 60% for others)
+cost_pct = df_clean['category'].map({
+    'Electronics': 0.65,
+    'Furniture':   0.60,
+    'Books':       0.50,
+    'Accessories': 0.45,
+    'Stationery':  0.40
+})
+df_clean['cost']          = (df_clean['revenue'] * cost_pct).round(2)
+df_clean['profit']        = (df_clean['revenue'] - df_clean['cost']).round(2)
+df_clean['profit_margin'] = ((df_clean['profit'] / df_clean['revenue']) * 100).round(2)
+
+# Revenue bins for customer value segmentation
+df_clean['order_value_tier'] = pd.cut(
+    df_clean['revenue'],
+    bins   = [0, 1000, 5000, 20000, float('inf')],
+    labels = ['Low (<₹1K)', 'Medium (₹1K-5K)', 'High (₹5K-20K)', 'Premium (>₹20K)']
+)
+
+# Flag high-discount orders (>20% discount)
+df_clean['is_high_discount'] = (df_clean['discount_pct'] > 0.20).astype(int)
+
+print("   ✓ profit, profit_margin columns created")
+print("   ✓ order_value_tier column created")
+print("   ✓ is_high_discount flag created")
+
+# ─── 2.4 Final clean dataset summary ─────────────────────────────
+print(f"\n✅ Data Cleaning Complete!")
+print(f"   Rows: {len(df_clean):,} (no rows dropped)")
+print(f"   Columns: {len(df_clean.columns)} (was {len(df.columns)}, added {len(df_clean.columns)-len(df.columns)} derived)")
+print(f"   Date range: {df_clean['order_date'].min().date()} → {df_clean['order_date'].max().date()}")
