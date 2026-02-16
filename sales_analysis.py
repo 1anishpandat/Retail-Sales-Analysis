@@ -95,3 +95,27 @@ for col in cat_cols:
     vals = df[col].dropna().unique()[:5]
     print(f"   {col}: {uniq} unique → {list(vals)}")
 
+
+# ══════════════════════════════════════════════════════════════════
+# SECTION 2: AFTERNOON - Data Cleaning & Preparation
+# ══════════════════════════════════════════════════════════════════
+print("\n" + "━" * 65)
+print("  SECTION 2: DATA CLEANING & PREPARATION")
+print("━" * 65)
+
+df_clean = df.copy()
+
+# ─── 2.1 Fix date column ─────────────────────────────────────────
+print("\n🔧 Step 1: Converting date column...")
+df_clean['order_date'] = pd.to_datetime(df_clean['order_date'])
+
+# Extract date parts - very useful for analysis!
+df_clean['year']          = df_clean['order_date'].dt.year
+df_clean['month']         = df_clean['order_date'].dt.month
+df_clean['month_name']    = df_clean['order_date'].dt.strftime('%b')
+df_clean['quarter']       = df_clean['order_date'].dt.quarter
+df_clean['quarter_label'] = 'Q' + df_clean['quarter'].astype(str)
+df_clean['day_of_week']   = df_clean['order_date'].dt.day_name()
+df_clean['week_of_year']  = df_clean['order_date'].dt.isocalendar().week.astype(int)
+df_clean['year_month']    = df_clean['order_date'].dt.to_period('M').astype(str)
+print("   ✓ Date parts extracted: year, month, quarter, day_of_week")
