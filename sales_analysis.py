@@ -201,3 +201,17 @@ print(f"""
 │  🔄 Return Rate:         {return_rate:>14.1f}%            │
 │  🏷️  Orders with Discount: {discount_rate:>12.1f}%            │
 └─────────────────────────────────────────────────────────┘""")
+
+
+# ─── Year over Year comparison ───────────────────────────────────
+print("\n📊 Year-over-Year Comparison:")
+yoy = df_clean.groupby('year').agg(
+    revenue      = ('revenue', 'sum'),
+    orders       = ('order_id', 'count'),
+    profit       = ('profit', 'sum'),
+    avg_order    = ('revenue', 'mean'),
+    units        = ('quantity', 'sum')
+).round(2)
+yoy['revenue_growth'] = yoy['revenue'].pct_change() * 100
+yoy['order_growth']   = yoy['orders'].pct_change() * 100
+print(yoy.to_string())
