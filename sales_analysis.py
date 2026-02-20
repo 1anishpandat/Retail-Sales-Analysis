@@ -215,3 +215,7 @@ yoy = df_clean.groupby('year').agg(
 yoy['revenue_growth'] = yoy['revenue'].pct_change() * 100
 yoy['order_growth']   = yoy['orders'].pct_change() * 100
 print(yoy.to_string())
+
+# ══════════════════════════════════════════════════════════════════
+# SECTION 4: MORNING DAY 2 - Advanced Analysis with GroupBy
+# ══════════════════════════════════════════════════════════════════
