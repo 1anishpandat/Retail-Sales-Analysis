@@ -171,3 +171,33 @@ print(f"\n✅ Data Cleaning Complete!")
 print(f"   Rows: {len(df_clean):,} (no rows dropped)")
 print(f"   Columns: {len(df_clean.columns)} (was {len(df.columns)}, added {len(df_clean.columns)-len(df.columns)} derived)")
 print(f"   Date range: {df_clean['order_date'].min().date()} → {df_clean['order_date'].max().date()}")
+
+# ══════════════════════════════════════════════════════════════════
+# SECTION 3: EVENING - KPI Calculation & Basic Analysis
+# ══════════════════════════════════════════════════════════════════
+print("\n" + "━" * 65)
+print("  SECTION 3: KEY PERFORMANCE INDICATORS (KPIs)")
+print("━" * 65)
+
+total_revenue   = df_clean['revenue'].sum()
+total_orders    = len(df_clean)
+total_profit    = df_clean['profit'].sum()
+avg_order_value = df_clean['revenue'].mean()
+total_units     = df_clean['quantity'].sum()
+avg_margin      = df_clean['profit_margin'].mean()
+return_rate     = df_clean['is_returned'].mean() * 100
+discount_rate   = (df_clean['discount_pct'] > 0).mean() * 100
+
+print(f"""
+┌─────────────────────────────────────────────────────────┐
+│              OVERALL BUSINESS KPIs (2023-2024)          │
+├─────────────────────────────────────────────────────────┤
+│  💰 Total Revenue:       ₹{total_revenue:>15,.0f}            │
+│  📦 Total Orders:        {total_orders:>15,}            │
+│  📈 Total Profit:        ₹{total_profit:>15,.0f}            │
+│  🛒 Avg Order Value:     ₹{avg_order_value:>15,.2f}            │
+│  📊 Avg Profit Margin:   {avg_margin:>14.1f}%            │
+│  📦 Total Units Sold:    {total_units:>15,}            │
+│  🔄 Return Rate:         {return_rate:>14.1f}%            │
+│  🏷️  Orders with Discount: {discount_rate:>12.1f}%            │
+└─────────────────────────────────────────────────────────┘""")
