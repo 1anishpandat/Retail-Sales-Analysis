@@ -220,3 +220,4 @@ print(yoy.to_string())
 # SECTION 4: MORNING DAY 2 - Advanced Analysis with GroupBy
 # ══════════════════════════════════════════════════════════════════
 print("\n" + "━" * 65)
+cat_analysis = df_clean.groupby('category').agg
