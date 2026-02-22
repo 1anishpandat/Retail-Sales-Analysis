@@ -219,5 +219,15 @@ print(yoy.to_string())
 # ══════════════════════════════════════════════════════════════════
 # SECTION 4: MORNING DAY 2 - Advanced Analysis with GroupBy
 # ══════════════════════════════════════════════════════════════════
-print("\n" + "━" * 65)
-cat_analysis = df_clean.groupby('category').agg
+print("\n📊 Q2: Revenue by Category")
+cat_analysis = df_clean.groupby('category').agg(
+    total_revenue  = ('revenue', 'sum'),
+    total_orders   = ('order_id', 'count'),
+    total_units    = ('quantity', 'sum'),
+    avg_order_val  = ('revenue', 'mean'),
+    avg_margin     = ('profit_margin', 'mean'),
+    total_profit   = ('profit', 'sum')
+).round(2).sort_values('total_revenue', ascending=False)
+
+cat_analysis['revenue_share_pct'] = (cat_analysis['total_revenue'] / total_revenue * 100).round(1)
+print(cat_analysis.to_string())
